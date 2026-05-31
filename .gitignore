@@ -2,3 +2,8 @@
 *.RData
 *.Ruserdata
 *.Rproj.user
+
+diego-torrealba.Rproj
+.DS_STORE
+/.DS_STORE
+.positai
