@@ -1,174 +1,70 @@
 ---
-title: "Hosting a GitHub Page"
-author: "Rob Wells"
-date: "5-29-2026"
-format:
-  html:
-    theme: cosmo
+title: "DiegoTorrealba-IYC-StoryMemo"
+author: "Diego Torrealba"
+date: "2026-06-01"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
 ---
 
-# Hosting a GitHub Page - R Cheat Sheet
+# 1. Name, contact information, date
 
-This exercise will allow you to create a basic web page which will be required for the Investigate Your Community final project option.
+Diego Torrealba
 
-For this exercise, you will create a page with your one paragraph story idea. You will then host it on your GitHub page.
+\(608\) 332-9369 \| diegotorrealba37\@gmail.com
 
+2026-06-01
 
-## Styled Text
+# 2. What is this story about?
 
-At the core, QMD files are text files, and they allow you to use a very lightweight "markup" language to style text, similar to html, but much less fussy. 
+An investigation into how minority-owned businesses in Texas and California are represented in federal contract spending in the last years of the Trump (2020) and Biden (2024) administrations, as well as which agencies are giving the most and least funding between the two states in each year to those businesses and if that changed between 2020 and 2024.
+By looking at Texas and California, this analysis will investigate how an administration may differ its funding between states led by different political majorities.
 
-Outside of the codeblocks (the gray sections where we write code), we can style any text using standard markdown styling. 
+# 3. Why tell this story now?
 
-This is a nice guide to styling text with markdown: [Markdown guide ](https://quarto.org/docs/authoring/markdown-basics.html)
+With political polarization rising, DEI being scrutinized and the second Trump administration weaponizing federal funding as a political weapon, this story is important now because it offers financial context into how both the Biden and Trump administrations differ in their support for minority-owned businesses in opposing state political climates.
 
-We can create headings similar to html's h1 to h6 with hashtags.  
+# 4. Who is your target audience?
 
-##### This is an h5
+The target audience for this story includes people living in Texas or California, minority-business owners both in the U.S. and in Texas or California, and those interested in federal spending habits of different administrations.
 
-We can create links, like this: [google](https://google.com)
+# 5. Three people you can interview for this story.
 
-We can **bold** or *italic* text. 
+1.  Minority business owner in Texas or California with federal contracts
 
-We can create bulleted lists.  
+2.  Official in the Minority Business Development Agency, part of the Department of Commerce
 
-* bullet one
-* bullet two
-* bullet three
+3.  Economists or scholars at universities studying the intersection of federal funding and DEI policy.
 
-## Code blocks
+# 6. Potential impact
 
-We can also add special code inside of code blocks -- the gray sections where we write code -- that control how they render in our html document.  These output options let us do things like:
+Using the last two administrations, this story could offer historical precedent for the heightened scrutiny federal contractors face now and offer a platform for those who have potentially lost or gained federal funding based on who was currently in office. It also explores the question of whether the federal government can prioritize certain spending in different states based on its political majority, which has direct consequences for the people living and businesses operating in those states. 
 
-* Show or hide the code when we render our html document  (echo: true or false)
-* Prevent the code from actually running when we render our html document (eval: true or false)
-* Hide warnings from outputing when we render our html document (warning: true or false)
+# 7. What are three things that surprised or interested you about this story?
 
-There's a [full guide here](https://quarto.org/docs/computations/execution-options.html#output-options).
+1. The idea that federal funding can give certain businesses advantages or disadvantages in different states, and how that can be heavily influenced by who is currently president. 
 
-The code below, for example, will output the text inside the print statement when rendered to html, but the actual code -- the print() function -- will be hidden.
+2. That the federal government tracks how many minority-owned businesses it contracts with every year, begging the question of whether they are majority funded by certain agencies. 
 
-## Create your website
+3. The magnitude in spending that the federal government contracts to businesses, irregardless of the current administration, demonstrating the influential role of the federal government in the economy. 
 
-In place of these instructions, you will paste your project one paragraph story idea into this document and any code you've developed so far.
+# 8. Context
 
-You will need to load libraries and data because rendering a page requires a full R session to execute on the code.
+- The Ending Discrimination in Government Contracting Act, introduced in April, seeks to expand on Trump's executive order to eliminate DEI-initiatives in federal contracting ([Nick Wakeman, May 7, 2026, Washington Technology](https://www.washingtontechnology.com/contracts/2026/05/legislative-proposal-would-eliminate-contracting-preferences-minority-women-owned-businesses/413389/?oref=wt-topic-lander-river)).
 
-First, create H1 headers 
+- There's evidence of how barriers for minority-owned businesses to access federal funding hurts those businesses, namely those owned by Latinos ([Tonantzin Carmona, March 26, 2026, The Brookings Institution](https://www.brookings.edu/articles/federal-policy-shifts-are-reshaping-access-to-capital-and-contracts-for-latino-and-minority-owned-businesses/)).
 
-**For example:** 
+- Minority contractors recently sued the Trump administration to block his anti-DEI policy affecting minority-owned companies ([Sean Newhouse, April 21, 2026, Government Executive](https://www.govexec.com/management/2026/04/contractors-sue-block-trumps-federal-dei-executive-order/413013/))
 
-# Income and Vacancies of Baltimore Neighborhoods 2020
+# 9. How will you make this story visual?
 
-## Looking at wealth inequality in Charm City
+Primarily through data visualizations comparing spending both within each state, between each state, and overall per capita; however, this story could be accompanied with a video testimonial of a minority-business owner who contracted with the federal government to describe their experience. Another data visualization could be a map showing which counties have the most minority-spending in each state between the two administrations. 
 
-```{r eval=FALSE, include=TRUE}
+# 10. What other information do you need to gather?
 
-# You will write your code in chunks but not execute the data. Use {r eval=FALSE, include=TRUE} in the header so the page will render without running the actual code.
-income_vacancy %>% 
-  ggplot(aes(x = community)) +
-  geom_point(aes(y=income_2020), color = "#64D197", stroke=5) +
-  geom_point(aes(y=vacant_2020*1000), stroke=5, color = "#FB8AE3") +
-  scale_y_continuous(
-    name = "2020 Income (Green)", limits=c(0, 62000), labels=scales::dollar_format(),
-    sec.axis = sec_axis(~./60000, name="2020 Percent Vacancies (Red)", labels = scales::percent))+
-  #scale_y_continuous(labels = scales::percent) +
-  labs(
-    title = "Income and Vacancies of Baltimore Neighborhoods 2020",
-    x = "Community",
-    caption = "source: BNIA Data - By: Parker Leipzig and Rob Wells"
-  )
-```
+Would need to find minority-business owners who would be willing to talk about their contract funding and contract spending in each state from USASpending.gov. 
 
+# 11. Estimated delivery
 
-## Set up for hosting  
-
- * Create a new folder in your repository called "docs" (if one isn't there already)
- * Rename this document as "index.qmd"
- * Move "index.qmd" into the "docs" folder
-      
-
-## Render this document as an html page       
- 
- * Make sure this document is named "index.qmd" and is in the "docs" folder
- * Click Render button. It will create an html version of this page, called "index.html" 
- * Use GitHub Desktop to push your files to your your github repository on the web. 
- * Access the URL from your Github repository. 
-
-## Host html on GitHub    
-
- * Go to your github repository on the web, such as https://github.com/djnf-data-2026/casey-mann
- * Click on Settings on the top right. 
- * Scroll down to the Pages section of Settings. 
- * Change the Branch to /docs and click save.
-  
-  
-#### To see your file hosted:  
-
-* Back to your GitHub repo on the web: such as https://github.com/djnf-data-2026/casey-mann
-* Click on Settings, then Pages
-* Under GitHub Pages, you should see "Your site is live at https://djnf-data-2026.github.io/casey-mann/"
-* Click that URL
-* If it works, email it to robwells@umd.edu
-      
-
-## REVEL IN YOUR NERD POWERS  
-
-# Part 2: Embedding Images  
-
-* create a folder in your repository's main branch, call it images
-
-* find any .jpeg, .jpg or .png file and insert it into that folder.
-
-* In a QMD file, display the image as follows:
-
-#![CAPTION FOR YOUR PHOTO](images/your_link_here.png)
-
-#![CHATTER FOR YOUR chart](images/xl-refresher-grid_SHEETS.png)
-
-
-A more advanced technique controlling the width and height
-
-#![Read the Screen](images/xl-refresher-SHEETS_screen.png){width="100%"}
-
-
-### Embedding code
-
-From a **Datawrapper Map**
-
-<iframe title="Small Business Reporting, Spring 2024" aria-label="Map" id="datawrapper-chart-z4bny" src="https://datawrapper.dwcdn.net/z4bny/5/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="500" data-external="1"></iframe><script type="text/javascript">!function(){"use strict";window.addEventListener("message",(function(a){if(void 0!==a.data["datawrapper-height"]){var e=document.querySelectorAll("iframe");for(var t in a.data["datawrapper-height"])for(var r=0;r<e.length;r++)if(e[r].contentWindow===a.source){var i=a.data["datawrapper-height"][t]+"px";e[r].style.height=i}}}))}();
-</script>
-
-
-## Embedding video
-
-### Deep Nerd Video
-
-
-::: {#first_steps}
-<iframe width="560" height="315" src="https://www.youtube.com/embed/TNP_unReOpw?si=CQC3cG49TShkoJOG" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-:::
-
-::: {#second_steps}
-### A great lecture on structural racism in journalism
-
-<iframe width="560" height="315" src="https://www.youtube.com/embed/DIDHbEZYFSc?si=a-KNzlQgoGjXD6VV" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-:::
-
-**Now replace these two videos with something you selected.**
-
-The embed code is in the video share feature
-
-## Instructions to embed a gif
-```{r text_to_columns.gif, out.width="100%", echo=FALSE}
-### Embed a GIF
-#First, download a GIF (extension will be .gif) and load it into "images" folder
-#if (knitr::is_html_output()) knitr::include_graphics("images/text_to_columns.gif")  
-
-```
-
-
-This is a very basic starter but it will get you to the finish line on Saturday.
-Good luck!
-
---30--
+A week or two, depending on how soon sources reach back. 
