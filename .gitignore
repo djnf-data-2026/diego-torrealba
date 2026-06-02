@@ -7,3 +7,13 @@ diego-torrealba.Rproj
 .DS_STORE
 /.DS_STORE
 .positai
+
+submissions/
+submissions/*
+
+data/California2020Contracts.csv
+data/California2024Contracts.csv
+data/Texas2020Contracts.csv
+data/Texas2024Contracts.csv
+data/TravisLawEnf&Defense-2020to2024/
+

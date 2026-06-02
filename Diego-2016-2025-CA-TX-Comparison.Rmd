@@ -1,0 +1,185 @@
+---
+title: "Diego-2016-2025-CA-TX-Comparison"
+output: html_document
+date: "2026-06-01"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r}
+#| label: setup
+
+library(tidyverse)
+library(janitor)
+library(scales)
+library(tidycensus)
+library(inflateR)
+
+options(scipen = 999)  # Disable scientific notation globally
+census_api_key(Sys.getenv("MY_CENSUS_API_KEY"))
+
+spending_2020_2024 <- read_csv("data/federal spending by county 2020-2024.csv") |> clean_names()
+```
+
+# Overall spending comparisons
+
+## Comparing California and Texas in 2016
+
+Adjust for inflation 
+
+```{r}
+#| label: adjusting-spending_2020_2024-for-inflation
+
+spending_2020_2024_adjusted <- spending_2020_2024 |> 
+  mutate(
+    spending_total_adjusted = case_when(
+      fyear == 2020 ~ adjust_inflation(spending_total, from_year = 2020, currency = "USD"),
+      fyear == 2021 ~ adjust_inflation(spending_total, from_year = 2021, currency = "USD"),
+      fyear == 2022 ~ adjust_inflation(spending_total, from_year = 2022, currency = "USD"),
+      fyear == 2023 ~ adjust_inflation(spending_total, from_year = 2023, currency = "USD"),
+      fyear == 2024 ~ adjust_inflation(spending_total, from_year = 2024, currency = "USD"),
+      .default = NA
+    )
+  ) |>
+  select(-c(contracts, grants, direct_payments))
+
+spending_2020_2024_adjusted
+```
+
+
+```{r}
+#| label: filtering-aggregate-data
+
+spending_2020_tx_ca <- spending_2020_2024_adjusted |> filter(fyear == 2020) |> filter(state_nm == "CALIFORNIA" | state_nm == "TEXAS")
+spending_2024_tx_ca <- spending_2020_2024_adjusted |> filter(fyear == 2024) |> filter(state_nm == "CALIFORNIA" | state_nm == "TEXAS")
+```
+
+```{r}
+#| label: getting-2020-and-2024-population-counts-from-census
+
+# 2020
+
+tx_ca_2020_pop <- get_acs(geography = "state", year = 2020, variables = "B01003_001E", state = "Texas") |> 
+  rbind(get_acs(geography = "state", year = 2020, variables = "B01003_001E", state = "California"))
+
+tx_2020_pop <- tx_ca_2020_pop[tx_ca_2020_pop$NAME == "Texas", "estimate"][[1]]
+ca_2020_pop <- tx_ca_2020_pop[tx_ca_2020_pop$NAME == "California", "estimate"][[1]]
+
+# 2024
+
+tx_ca_2024_pop <- get_acs(geography = "state", year = 2024, variables = "B01003_001E", state = "Texas") |> 
+  rbind(get_acs(geography = "state", year = 2024, variables = "B01003_001E", state = "California"))
+
+tx_2024_pop <- tx_ca_2024_pop[tx_ca_2024_pop$NAME == 'Texas', 'estimate'][[1]]
+ca_2024_pop <- tx_ca_2024_pop[tx_ca_2024_pop$NAME == 'California', 'estimate'][[1]]
+```
+
+```{r}
+#| label: summarizing-2020-federal-spending-in-ca-and-tx
+
+spending_2020_tx <- spending_2020_tx_ca |> 
+  filter(state_nm == "TEXAS") 
+
+spending_2020_tx_agency <- spending_2020_tx |> 
+  group_by(agency) |>
+  summarize(agency_total_tx = sum(spending_total_adjusted), .groups = "drop") |>
+  mutate(agency_total_per_capita_tx = round(agency_total_tx / tx_2020_pop, 2)) |>
+  arrange(desc(agency_total_per_capita_tx))
+
+spending_2020_ca <- spending_2020_tx_ca |>
+  filter(state_nm == "CALIFORNIA") 
+
+spending_2020_ca_agency <- spending_2020_ca |>
+  group_by(agency) |>
+  summarize(agency_total_ca = sum(spending_total_adjusted), .groups = "drop") |>
+  mutate(agency_total_per_capita_ca = round(agency_total_ca / ca_2020_pop, 2)) |> 
+  arrange(desc(agency_total_per_capita_ca))
+
+agency_spending_2020_ca_tx <- spending_2020_ca_agency |> 
+  full_join(spending_2020_tx_agency, join_by("agency"))
+
+agency_spending_2020_ca_tx
+
+agencies_2020 <- agency_spending_2020_ca_tx |> distinct(agency) |> pull(agency)
+
+all_agency_spending_2020_ca_tx <- agency_spending_2020_ca_tx |>
+  summarize(
+    ca_all_agency_total_2020 = sum(agency_total_ca, na.rm = T),
+    tx_all_agency_total_2020 = sum(agency_total_tx, na.rm = T)
+  ) |>
+  mutate(
+    ca_all_agency_per_capita_2020 = round(ca_all_agency_total_2020 / ca_2020_pop, 2),
+    tx_all_agency_per_capita_2020 = round(tx_all_agency_total_2020 / tx_2020_pop, 2)
+  )
+
+all_agency_spending_2020_ca_tx
+```
+
+```{r}
+#| label: summarizing-2024-federal-spending-in-ca-and-tx
+
+spending_2024_tx <- spending_2024_tx_ca |> filter(state_nm == "TEXAS")
+
+spending_2024_tx_agency <- spending_2020_tx |>
+  group_by(agency) |>
+  summarize(agency_total_tx = sum(spending_total_adjusted), .groups = "drop") |>
+  mutate(agency_total_per_capita_tx = round(agency_total_tx / tx_2024_pop, 2)) |>
+  arrange(desc(agency_total_per_capita_tx))
+
+spending_2024_ca <- spending_2024_tx_ca |> filter(state_nm == "CALIFORNIA")
+
+spending_2024_ca_agency <- spending_2024_ca |>
+  group_by(agency) |>
+  summarize(agency_total_ca = sum(spending_total_adjusted), .groups = "drop") |>
+  mutate(agency_total_per_capita_ca = round(agency_total_ca / ca_2024_pop, 2)) |>
+  arrange(desc(agency_total_per_capita_ca))
+
+agency_spending_2024_ca_tx <- spending_2024_ca_agency |>
+  full_join(spending_2024_tx_agency, join_by("agency"))
+
+agency_spending_2024_ca_tx
+
+agencies_2024 <- agency_spending_2024_ca_tx |> distinct(agency) |> pull(agency)
+
+all_agency_spending_2024_ca_tx <- agency_spending_2024_ca_tx |>
+  summarize(
+    ca_all_agency_total_2024 = sum(agency_total_ca, na.rm = T),
+    tx_all_agency_total_2024 = sum(agency_total_tx, na.rm = T)
+  ) |>
+  mutate(
+    ca_all_agency_per_capita_2024 = round(ca_all_agency_total_2024 / ca_2024_pop, 2),
+    tx_all_agency_per_capita_2024 = round(tx_all_agency_total_2024 / tx_2024_pop, 2)
+  )
+
+all_agency_spending_2024_ca_tx
+```
+
+
+```{r}
+all_agencies <- union(agencies_2020, agencies_2024)
+all_agencies
+```
+
+
+
+```{r}
+#| label: reading-contracts-data
+
+# 2020
+tx_contracts_2020 <- read_csv("data/Texas2020Contracts.csv", col_types = cols(.default = "c")) |> clean_names()
+ca_contracts_2020 <- read_csv("data/California2020Contracts.csv", col_types = cols(.default = "c")) |> clean_names()
+
+# 2024
+tx_contracts_2024 <- read_csv("data/Texas2024Contracts.csv", col_types = cols(.default = "c")) |> clean_names()
+ca_contracts_2024 <- read_csv("data/California2024Contracts.csv", col_types = cols(.default = "c")) |> clean_names()
+
+```
+
+```{r}
+
+all_contract_cols <- union(tx_contracts_2020 |> names() , tx_contracts_2024 |> names()) |> union( ca_contracts_2020 |> names()) |> union(ca_contracts_2024 |> names() )
+all_contract_cols
+```
+

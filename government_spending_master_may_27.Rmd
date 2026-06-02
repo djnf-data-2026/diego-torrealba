@@ -156,10 +156,94 @@ Using the USAspending.gov website, name the top five companies by this category 
 Understand there are flaws with county-level data
 
 ```{r}
+#| label: lawenf-defense-spending-prep
+ 
+lawenf_defense_agencies_list <- c(
+  "Department of Defense",
+  "Department of Justice",
+  "Department of Homeland Security",
+  "Department of Energy", # nuclear weapons
+  "Defense Nuclear Facilities Safety Board", # nuclear weapons
+  "Selective Service System", # the draft
+  "Court Services and Offender Supervision Agency", #probation, parole and offender supervision
+  "District of Columbia Courts" # judicial system
+)
 
+lawenf_defense_spending <- spending |>
+  filter(agency %in% lawenf_defense_agencies_list)
 
+state_lawenf_defense_spending <- lawenf_defense_spending |>
+  group_by(fyear, state_nm) |>
+  summarize(total_spent_by_year = sum(spending_total), .groups = "drop") |>
+  mutate(`total_spent_by_year_$` = dollar(total_spent_by_year / 1e9, suffix = "B", accuracy = 0.01))
 
+tx_lawenf_defense_spending <- state_lawenf_defense_spending |> 
+  filter(state_nm == "TEXAS")
 ```
+
+```{r}
+#| label: analyze-tx-lawenf-defense-spending-over-time
+
+tx_lawnef_defense_plot <- ggplot(tx_lawenf_defense_spending, aes(x = fyear, y = `total_spent_by_year_$`, group = 1)) + 
+  geom_line() + 
+  geom_point() +
+  theme_minimal()
+
+tx_lawnef_defense_plot
+```
+
+```{r}
+#| label: tx-lawenf-defense-percent-decrease-calculation
+round(((tx_lawenf_defense_spending$total_spent_by_year[5] - tx_lawenf_defense_spending$total_spent_by_year[1]) / tx_lawenf_defense_spending$total_spent_by_year[1]) * 100, 2)
+```
+
+Shows an inconsistent decrease in defense and law enforcement spending in Texas, but between 2020 and 2024, there's an around 43.17% decrease in spending.
+
+```{r, fig.width=8, fig.height=8}
+#| label: comparing-tx-total-spending-to-other-states
+
+state_lawenf_defense_spending_totals <- state_lawenf_defense_spending |>
+  group_by(state_nm) |>
+  summarize(
+    total_spent = sum(total_spent_by_year),
+    avg_spent = mean(total_spent_by_year)
+    ) |>
+  mutate(
+    `total_spent_$` = dollar(total_spent / 1e9, suffix = "B", accuracy = 0.01),
+    `avg_spent_$` = dollar(avg_spent / 1e9, suffix = "B", accuracy = 0.01),
+    highlight_col = if_else(state_nm == 'TEXAS', "true", "false")
+    ) |>
+  arrange(desc(total_spent))
+
+tx_lawenf_defense_spending_compare_other_states_plot <- ggplot(state_lawenf_defense_spending_totals, aes(x = total_spent, y = reorder(state_nm, total_spent), fill = highlight_col)) +
+  geom_col() +
+  scale_fill_manual(values = c("true" = "green", "false" = "gray"), guide = "none") + 
+  scale_x_continuous(labels = label_number(scale_cut = cut_short_scale(), prefix = "$"))
+
+tx_lawenf_defense_spending_compare_other_states_plot
+```
+
+```{r}
+#| label: tx-va-lawenf-defense-comparison
+
+tx_va_defense_spending <- state_lawenf_defense_spending_totals |> 
+  filter(state_nm == "TEXAS" | state_nm == "VIRGINIA") 
+
+tx_va_defense_diff <- tx_va_defense_spending[tx_va_defense_spending$state_nm == "TEXAS", "total_spent"] - tx_va_defense_spending[tx_va_defense_spending$state_nm == "VIRGINIA", "total_spent"]
+
+tx_va_defense_diff |> mutate(`total_spent_$` = dollar(total_spent / 1e9, suffix = "B", accuracy = 0.01)) |> pull(`total_spent_$`)
+
+state_lawenf_defense_spending_totals |>
+  mutate(
+    total_ratio = round((total_spent / sum(total_spent)) * 100, 2)
+  )
+```
+
+Texas is the state that spends the most in total on law enforcement and defense between 2020 and 2024, followed by Virginia and California. Compared to Virginia, Texas has spent $36.84 billion more on law enforcement and defense. 
+
+Between 2020 and 2024, Texas has spent $297.82 billion dollars on law enforcement and defense, or 10.55% of total law enforcement and defense spending in the country. 
+
+Texas spends around $60 billion on law enforcement and defense spending per year between 2020 and 2024. 
 
 Social services spending by county.
 Examine the trend from 2020-2024 for your state.
@@ -168,18 +252,161 @@ How does your state compare to others?
 Using the USAspending.gov website, name the top five companies by this category by state Which counties are the winners?
 Understand there are flaws with county-level data Compare to law enforcement
 
+Here are the search filters I used to get assistance funding and contracts data for Travis County Law Enforcement and Defense Spending: 
+
+- Fiscal Years: 2020, 2021, 2022, 2023, 2024
+- Place of Performance: Travis County, Texas
+- Agency: Department of Defense, Department of Justice, Department of Homeland Security, Department of Energy, Defense Nuclear Facilities Safety Board, Selective Service System, Court Services and Offender Supervision Agency, District of Columbia Courts
+- Clicked "Awards" (as opposed to "Transactions" and "Sub-Awards")
+
+Be clear about measuring contract spending
+
 ```{r}
+#| label: combining-and-cleaning-travis-lawenf-defense-awards
 
+# assistance_funds <- read_csv("data/TravisLawEnf&Defense-2020to2024/Assistance_PrimeAwardSummaries_2026-05-29_H16M47S42_1.csv") |>
+#   clean_names() |> 
+#   select(
+#     award_latest_action_date,
+#     award_latest_action_date_fiscal_year,
+#     total_obligated_amount:award_base_action_date_fiscal_year,
+#     awarding_agency_name,
+#     awarding_sub_agency_name,
+#     awarding_office_name,
+#     funding_agency_name,
+#     funding_sub_agency_name,
+#     funding_office_name,
+#     recipient_name,
+#     recipient_parent_name,
+#     recipient_county_name,
+#     assistance_type_description,
+#     prime_award_base_transaction_description,
+#     business_funds_indicator_description,
+#     business_types_description,
+#     last_modified_date
+#   )
 
+contracts_defense_lawenf <- read_csv("data/TravisLawEnf&Defense-2020to2024/Contracts_PrimeAwardSummaries_2026-05-29_H16M47S11_1.csv", col_types = cols(.default = "c")) |>
+  clean_names() |>
+  select(
+    parent_award_agency_name,
+    total_obligated_amount:award_latest_action_date_fiscal_year,
+    awarding_agency_name,
+    awarding_sub_agency_name,
+    awarding_office_name,
+    funding_agency_name,
+    funding_sub_agency_name,
+    funding_office_name,
+    recipient_name,
+    recipient_parent_name,
+    recipient_county_name,
+    award_type,
+    prime_award_base_transaction_description,
+    last_modified_date
+  ) |>
+  mutate(
+    total_obligated_amount = as.double(total_obligated_amount),
+    total_outlayed_amount = as.double(total_outlayed_amount),
+    current_total_value_of_award = as.double(current_total_value_of_award),
+    potential_total_value_of_award = as.double(potential_total_value_of_award),
+    award_base_action_date = ymd(award_base_action_date),
+    award_base_action_date_fiscal_year = as.integer(award_base_action_date_fiscal_year),
+    award_latest_action_date = ymd(award_latest_action_date),
+    award_latest_action_date_fiscal_year = as.integer(award_latest_action_date_fiscal_year),
+    last_modified_date = as_datetime(last_modified_date)
+  ) 
 
+contracts_defense_lawenf |> glimpse()
 ```
+
+```{r}
+#| label: getting-top-companies-by-defense-lawenf
+
+contracts_defense_lawenf |>
+  group_by(recipient_name) |>
+  summarize(total_award_sum = sum(current_total_value_of_award), .groups = "drop") |>
+  arrange(desc(total_award_sum)) |> 
+  head(5) 
+```
+
+
 
 Differences across administrations For your state, compare the last year of Trump’s first administration (2020) to the last year of the Biden administration (2021) How did spending differ overall?
 Was one administration spending way more/less than another?
 Was one administration pouring more/less into specific agencies than the other administration?
 
 ```{r}
+#| label: getting-overall-spending-for-2020-and-2024
+
+# assuming the direction is supposed to be 2024 instead of 2021, as that was when Biden administration's ended. 
+
+spending_2020_2024 <- spending |> 
+  filter(fyear == 2020 | fyear == 2024) |>
+  group_by(fyear) |>
+  summarize(
+    total_spending = sum(spending_total),
+    avg_spending = mean(spending_total),
+    median_spending = median(spending_total),
+    .groups = "drop"
+  ) |>
+    mutate(
+    `total_spending_$` = dollar(total_spending / 1e12, suffix = "T", accuracy = 0.01),
+    `avg_spending_$` = dollar(avg_spending/ 1e6, suffix = "M", accuracy = 0.01),
+    `median_spending_$` = dollar(median_spending / 1e6, suffix = "M", accuracy = 0.01)
+  )
+
+spending_2020_2024_percent_change <- round(((spending_2020_2024[spending_2020_2024$fyear == 2024, "total_spending"] - spending_2020_2024[spending_2020_2024$fyear == 2020, "total_spending"]) / spending_2020_2024[spending_2020_2024$fyear == 2020, "total_spending"]) * 100, 2) |>
+  rename(`total_spending_%_change` = total_spending)
+
+spending_2020_2024_diff <- (spending_2020_2024[spending_2020_2024$fyear == 2024, "total_spending"] - spending_2020_2024[spending_2020_2024$fyear == 2020, "total_spending"]) |>
+  rename(total_spending_diff = total_spending) |>
+  mutate(total_spending_diff = dollar(total_spending_diff / 1e9, suffix = "B", accuracy = 0.01))
 
 
+spending_2020_2024_summary <- cbind(spending_2020_2024_percent_change, spending_2020_2024_diff)
+
+spending_2020_2024_summary
+```
+
+Comparing the last year of the first Trump administration (2020) to the last year of the Biden administration (2024), the Biden administration spent $655.99 billion more than the Trump administration, which is a 15.45% increase in total spending.
+
+```{r}
+#| label: getting-agencies-for-2020-compared-to-2024
+
+agency_spending_2020 <- spending |>
+  filter(fyear == 2020) |>
+  group_by(fyear, agency) |>
+  summarize(agency_total= sum(spending_total), .groups = "drop") |>
+  arrange(desc(agency_total)) |>
+  head(20)
+
+agency_spending_2024 <- spending |>
+  filter(fyear == 2024) |>
+  group_by(fyear, agency) |>
+  summarize(agency_total = sum(spending_total), .groups = "drop") |>
+  arrange(desc(agency_total)) |>
+  head(20)
+
+agency_spending_2020_2024 <- rbind(agency_spending_2020, agency_spending_2024) |>
+  mutate(
+    `agency_total_$` = dollar(agency_total),
+    fyear = as.character(fyear)
+    ) |>
+  mutate(
+    agency_year = paste0(fyear, " ", agency)
+  ) |>
+  arrange(desc(agency_total))
+
+agency_spending_2020_2024
+```
+
+```{r, fig.width=15, fig.height=8}
+#| label: agency-spending-2020-2024-plot
+
+ggplot(agency_spending_2020_2024, aes(x = agency_total, y = reorder(agency_year, agency_total), fill = fyear)) +
+  geom_col(position = "dodge") + 
+  geom_text(aes(label = dollar(agency_total / 1e9, suffix = "B", accuracy = 0.01), hjust = -.15)) + 
+  scale_fill_manual(values = c("2024" = "blue", "2020" = "red"), guide = "none") + 
+  scale_x_continuous(labels = label_number(scale_cut = cut_short_scale(), prefix = "$")) 
 
 ```
