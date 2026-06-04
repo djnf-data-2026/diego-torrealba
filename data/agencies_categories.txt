@@ -1,0 +1,86 @@
+{
+  "Defense & National Security": [
+    "Department of Defense",
+    "Department of Homeland Security",
+    "Nuclear Regulatory Commission",
+    "Defense Nuclear Facilities Safety Board",
+    "Selective Service System"
+  ],
+  "Social Services & Public Health": [
+    "Department of Health and Human Services",
+    "Social Security Administration",
+    "Department of Housing and Urban Development",
+    "Department of Veterans Affairs",
+    "Corporation for National and Community Service",
+    "Peace Corps"
+  ],
+  "Economic & Financial Regulation": [
+    "Department of the Treasury",
+    "Securities and Exchange Commission",
+    "Federal Trade Commission",
+    "Consumer Financial Protection Bureau",
+    "Commodity Futures Trading Commission",
+    "Consumer Product Safety Commission",
+    "Export-Import Bank of the United States",
+    "Pension Benefit Guaranty Corporation",
+    "National Credit Union Administration",
+    "Small Business Administration",
+    "Overseas Private Investment Corporation",
+    "U.S. International Development Finance Corporation"
+  ],
+  "Justice, Law & Civil Rights": [
+    "Department of Justice",
+    "Equal Employment Opportunity Commission",
+    "Federal Election Commission",
+    "Election Assistance Commission",
+    "Merit Systems Protection Board",
+    "Federal Mediation and Conciliation Service",
+    "National Labor Relations Board",
+    "Federal Maritime Commission",
+    "International Trade Commission",
+    "Court Services and Offender Supervision Agency"
+  ],
+  "Science, Technology & Environment": [
+    "National Aeronautics and Space Administration",
+    "Department of Energy",
+    "Environmental Protection Agency",
+    "National Science Foundation",
+    "United States Chemical Safety Board",
+    "Gulf Coast Ecosystem Restoration Council"
+  ],
+  "Agriculture, Commerce & Labor": [
+    "Department of Agriculture",
+    "Department of Commerce",
+    "Department of Labor",
+    "Department of the Interior",
+    "United States Trade and Development Agency"
+  ],
+  "Education, Arts & Culture": [
+    "Department of Education",
+    "National Endowment for the Arts",
+    "National Endowment for the Humanities",
+    "Institute of Museum and Library Services",
+    "Smithsonian Institution",
+    "National Gallery of Art",
+    "Morris K. Udall and Stewart L. Udall Foundation"
+  ],
+  "Infrastructure & Transportation": [
+    "Department of Transportation",
+    "National Transportation Safety Board",
+    "Federal Communications Commission",
+    "Railroad Retirement Board"
+  ],
+  "Foreign Affairs & International Development": [
+    "Department of State",
+    "Agency for International Development",
+    "Millennium Challenge Corporation",
+    "U.S. Agency for Global Media"
+  ],
+  "Government Operations & Administration": [
+    "General Services Administration",
+    "Office of Personnel Management",
+    "Government Accountability Office",
+    "National Archives and Records Administration",
+    "Executive Office of the President"
+  ]
+}
