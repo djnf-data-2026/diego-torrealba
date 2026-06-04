@@ -1,5 +1,5 @@
 ---
-title: "DiegoTorrealba-IYC-StoryMemo"
+title: "DiegoTorrealba-IYC-StoryMemo-2"
 author: "Diego Torrealba"
 date: "2026-06-01"
 output: html_document
@@ -39,15 +39,16 @@ The target audience for this story includes people living in Texas or California
 
 # 6. Potential impact
 
-Using the last two administrations, this story could offer historical precedent for the heightened scrutiny federal contractors face now and offer a platform for those who have potentially lost or gained federal funding based on who was currently in office. It also explores the question of whether the federal government can prioritize certain spending in different states based on its political majority, which has direct consequences for the people living and businesses operating in those states. 
+Using the last two administrations, this story could offer historical precedent for the heightened scrutiny federal contractors face now and offer a platform for those who have potentially lost or gained federal funding based on who was currently in office.
+It also explores the question of whether the federal government can prioritize certain spending in different states based on its political majority, which has direct consequences for the people living and businesses operating in those states.
 
 # 7. What are three things that surprised or interested you about this story?
 
-1. The idea that federal funding can give certain businesses advantages or disadvantages in different states, and how that can be heavily influenced by who is currently president. 
+1.  The idea that federal funding can give certain businesses advantages or disadvantages in different states, and how that can be heavily influenced by who is currently president.
 
-2. That the federal government tracks how many minority-owned businesses it contracts with every year, begging the question of whether they are majority funded by certain agencies. 
+2.  That the federal government tracks how many minority-owned businesses it contracts with every year, begging the question of whether they are majority funded by certain agencies.
 
-3. The magnitude in spending that the federal government contracts to businesses, irregardless of the current administration, demonstrating the influential role of the federal government in the economy. 
+3.  The magnitude in spending that the federal government contracts to businesses, irregardless of the current administration, demonstrating the influential role of the federal government in the economy.
 
 # 8. Context
 
@@ -59,12 +60,47 @@ Using the last two administrations, this story could offer historical precedent 
 
 # 9. How will you make this story visual?
 
-Primarily through data visualizations comparing spending both within each state, between each state, and overall per capita; however, this story could be accompanied with a video testimonial of a minority-business owner who contracted with the federal government to describe their experience. Another data visualization could be a map showing which counties have the most minority-spending in each state between the two administrations. 
+Primarily through data visualizations comparing spending both within each state, between each state, and overall per capita; however, this story could be accompanied with a video testimonial of a minority-business owner who contracted with the federal government to describe their experience.
+Another data visualization could be a map showing which counties have the most minority-spending in each state between the two administrations.
 
 # 10. What other information do you need to gather?
 
-Would need to find minority-business owners who would be willing to talk about their contract funding and contract spending in each state from USASpending.gov. 
+Would need to find minority-business owners who would be willing to talk about their contract funding and contract spending in each state from USASpending.gov.
 
 # 11. Estimated delivery
 
-A week or two, depending on how soon sources reach back. 
+A week or two, depending on how soon sources reach back.
+
+# Story Memo 2 Additions
+
+## Overall minority-owned business contract awards totals per capita
+
+This is to show how minority-owned business contract awards in value are pretty similar between Texas and California, both in 2020 and 2024, but the number of contracts in California far surpasses those in Texas.
+
+```{=html}
+<iframe title="California surpasses Texas in federal contract awards amounts given to minority-owned businesses." aria-label="Grouped Bars" id="datawrapper-chart-f6vj7" src="https://datawrapper.dwcdn.net/f6vj7/1/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="" data-external="1"></iframe><script type="text/javascript">(function(){function e(){window.addEventListener(`message`,function(e){if(e.data[`datawrapper-height`]!==void 0){var t=document.querySelectorAll(`iframe`);for(var n in e.data[`datawrapper-height`])for(var r=0,i;i=t[r];r++)if(i.contentWindow===e.source){var a=e.data[`datawrapper-height`][n]+`px`;i.style.height=a}}})}e()})();</script>
+```
+
+## Minority-owned business contract awards totals per capita by federal agency categorization
+
+Shows how minority-owned business contracts are predominantly issued by federal agencies related to defense and national security in both Texas and California in 2020 and 2024. There are other major differences in category spending, like science technology, and environment in 2020 and justice, law, and civil rights in 2024. 
+
+Between 2020 and 2024, federal agencies related to defense and national security issued contracts to minority-owned businesses per-capita contract awards increased in Texas by 12%. In California, it increased by 28%. 
+
+```{=html}
+<iframe title="Federal agencies related to defense and national security consistently spent more money on contracts with minority-owned businesses in Texas than in California" aria-label="Grouped Bars" id="datawrapper-chart-BHG8B" src="https://datawrapper.dwcdn.net/BHG8B/6/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="" data-external="1"></iframe><script type="text/javascript">(function(){function e(){window.addEventListener(`message`,function(e){if(e.data[`datawrapper-height`]!==void 0){var t=document.querySelectorAll(`iframe`);for(var n in e.data[`datawrapper-height`])for(var r=0,i;i=t[r];r++)if(i.contentWindow===e.source){var a=e.data[`datawrapper-height`][n]+`px`;i.style.height=a}}})}e()})();</script>
+```
+
+## Unaggregated agency spending in both states with total and per capita awards
+
+```{=html}
+<iframe title="Federal agency award contracts to minority-owned businesses in Texas and California in 2020 and 2024" aria-label="Table" id="datawrapper-chart-49gPg" src="https://datawrapper.dwcdn.net/49gPg/3/" scrolling="no" frameborder="0" style="width: 0; min-width: 100% !important; border: none;" height="" data-external="1"></iframe><script type="text/javascript">(function(){function e(){window.addEventListener(`message`,function(e){if(e.data[`datawrapper-height`]!==void 0){var t=document.querySelectorAll(`iframe`);for(var n in e.data[`datawrapper-height`])for(var r=0,i;i=t[r];r++)if(i.contentWindow===e.source){var a=e.data[`datawrapper-height`][n]+`px`;i.style.height=a}}})}e()})();</script>
+```
+
+## Analysis of highest-valued federal contracts recipient in Texas 2024 that is a minority-owned business. 
+
+MVM, Inc., is a private security contractor that received awards from the Department of Homeland Security and the Department of Health and Human Services in 2024. Though it's headquartered in Virginia, it comes up as the highest award recipient because of its operations in Texas.
+
+The private company, which is not required to report SEC filings, has a history of working with [U.S. Immigration and Customs Enforcement](https://revealnews.org/article/ice-gave-185-million-deal-to-defense-contractor-under-investigation-for-housing-kids-in-office/) and the Department of Health and Human Services for immigration, security and protection services, and professional services for federal agencies. 
+
+It [was founded by former secret service agent Dario Marquez](https://dcist.com/story/18/06/21/dc-metro-area-trump-immigration/), who sold it to his son in 2015 but remains as chair and founder. 

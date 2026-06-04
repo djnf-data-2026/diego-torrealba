@@ -1,0 +1,79 @@
+state,awarding_agency_name,n_contracts,total_agency_award_values,total_agency_award_per_capita,category
+Texas,Department of Defense,20867,10353633287.680069,342.97,Defense & National Security
+California,Department of Defense,24408,13168039879.859968,335.17,Defense & National Security
+California,Department of Justice,790,3311867326.05,84.3,"Justice, Law & Civil Rights"
+Texas,Department of Homeland Security,537,2213458531.8999987,73.32,Defense & National Security
+California,General Services Administration,19942,1625509088.6699998,41.37,Government Operations & Administration
+Texas,Department of Veterans Affairs,674,1044907665.2100004,34.61,Social Services & Public Health
+California,Department of Health and Human Services,552,1193120503.7299995,30.37,Social Services & Public Health
+California,Department of Veterans Affairs,1244,1121228607.350001,28.54,Social Services & Public Health
+Texas,National Aeronautics and Space Administration,129,754884462.3300003,25.01,"Science, Technology & Environment"
+California,National Aeronautics and Space Administration,327,681551064.89,17.35,"Science, Technology & Environment"
+Texas,Department of Health and Human Services,70,493493862.8800002,16.35,Social Services & Public Health
+California,Department of Homeland Security,499,629497925.2499998,16.02,Defense & National Security
+California,Department of State,913,624987102.5100005,15.91,Foreign Affairs & International Development
+California,Department of Agriculture,1406,547735394.9599994,13.94,"Agriculture, Commerce & Labor"
+Texas,General Services Administration,5789,395618909.86001045,13.1,Government Operations & Administration
+California,Department of Labor,38,469694937.07,11.96,"Agriculture, Commerce & Labor"
+Texas,Department of Labor,31,304388572.45000005,10.08,"Agriculture, Commerce & Labor"
+California,Department of Transportation,225,309864579.7599999,7.89,Infrastructure & Transportation
+California,Department of the Interior,582,308952797.4400002,7.86,"Agriculture, Commerce & Labor"
+Texas,Department of Justice,432,193142471.72999996,6.4,"Justice, Law & Civil Rights"
+California,Department of Energy,123,223118354.25,5.68,"Science, Technology & Environment"
+Texas,Department of the Treasury,96,159838956.70000005,5.29,Economic & Financial Regulation
+Texas,Department of the Interior,207,142239060.20999995,4.71,"Agriculture, Commerce & Labor"
+California,Department of the Treasury,284,163475008.4699999,4.16,Economic & Financial Regulation
+Texas,Department of Agriculture,211,106313047.24000005,3.52,"Agriculture, Commerce & Labor"
+California,Environmental Protection Agency,64,95094499.19000001,2.42,"Science, Technology & Environment"
+Texas,Department of Transportation,83,72544030.38000003,2.4,Infrastructure & Transportation
+Texas,Environmental Protection Agency,30,71606769.2,2.37,"Science, Technology & Environment"
+Texas,Department of Energy,21,33381703.779999997,1.11,"Science, Technology & Environment"
+California,Department of Housing and Urban Development,11,43768628.94,1.11,Social Services & Public Health
+Texas,Department of Commerce,37,31471010.549999997,1.04,"Agriculture, Commerce & Labor"
+Texas,Securities and Exchange Commission,13,26365149.31,0.87,Economic & Financial Regulation
+Texas,Department of State,169,23093424.580000002,0.76,Foreign Affairs & International Development
+Texas,Social Security Administration,64,21980649.550000004,0.73,Social Services & Public Health
+California,Department of Commerce,103,28791115.23,0.73,"Agriculture, Commerce & Labor"
+California,National Archives and Records Administration,10,27479211.450000007,0.7,Government Operations & Administration
+Texas,Department of Housing and Urban Development,29,16326359.719999999,0.54,Social Services & Public Health
+California,Social Security Administration,43,20905509.430000007,0.53,Social Services & Public Health
+California,Department of Education,6,12879078.450000001,0.33,"Education, Arts & Culture"
+California,Government Accountability Office,5,6633424.27,0.17,Government Operations & Administration
+Texas,Department of Education,17,4156517.89,0.14,"Education, Arts & Culture"
+California,Nuclear Regulatory Commission,10,4781942.68,0.12,Defense & National Security
+California,Small Business Administration,29,3828703.11,0.1,Economic & Financial Regulation
+California,Millennium Challenge Corporation,1,2999552.89,0.08,Foreign Affairs & International Development
+Texas,Corporation for National and Community Service,1,2148365.87,0.07,Social Services & Public Health
+California,Federal Communications Commission,10,2776823.1900000004,0.07,Infrastructure & Transportation
+California,Securities and Exchange Commission,5,2471244.71,0.06,Economic & Financial Regulation
+California,Peace Corps,1,1838803.83,0.05,Social Services & Public Health
+California,National Transportation Safety Board,2,1760315.58,0.04,Infrastructure & Transportation
+California,U.S. Agency for Global Media,9,1752984.74,0.04,Foreign Affairs & International Development
+Texas,U.S. Agency for Global Media,2,990961.85,0.03,Foreign Affairs & International Development
+Texas,National Science Foundation,1,970021,0.03,"Science, Technology & Environment"
+Texas,Court Services and Offender Supervision Agency,5,958707.2,0.03,"Justice, Law & Civil Rights"
+Texas,Consumer Financial Protection Bureau,3,947550.4600000001,0.03,Economic & Financial Regulation
+Texas,National Archives and Records Administration,3,830984.16,0.03,Government Operations & Administration
+Texas,Federal Communications Commission,1,784896.44,0.03,Infrastructure & Transportation
+California,Federal Mediation and Conciliation Service,4,1347831.48,0.03,"Justice, Law & Civil Rights"
+California,National Labor Relations Board,9,1215154.35,0.03,"Justice, Law & Civil Rights"
+California,Agency for International Development,2,1009676,0.03,Foreign Affairs & International Development
+California,Federal Election Commission,2,1006375.95,0.03,"Justice, Law & Civil Rights"
+Texas,Agency for International Development,2,743533.46,0.02,Foreign Affairs & International Development
+Texas,Nuclear Regulatory Commission,2,476368.5,0.02,Defense & National Security
+California,U.S. International Development Finance Corporation,1,666684.93,0.02,Economic & Financial Regulation
+Texas,Equal Employment Opportunity Commission,2,398301.14,0.01,"Justice, Law & Civil Rights"
+Texas,Smithsonian Institution,2,371560,0.01,"Education, Arts & Culture"
+Texas,Small Business Administration,3,231434.25,0.01,Economic & Financial Regulation
+Texas,National Labor Relations Board,1,165806.96,0.01,"Justice, Law & Civil Rights"
+California,Federal Trade Commission,1,379451,0.01,Economic & Financial Regulation
+California,National Science Foundation,4,374596.27,0.01,"Science, Technology & Environment"
+Texas,Federal Trade Commission,1,81837,0,Economic & Financial Regulation
+Texas,International Trade Commission,1,11400,0,"Justice, Law & Civil Rights"
+California,Smithsonian Institution,5,127558.16,0,"Education, Arts & Culture"
+California,Equal Employment Opportunity Commission,10,113608,0,"Justice, Law & Civil Rights"
+California,Commodity Futures Trading Commission,1,75477.78,0,Economic & Financial Regulation
+California,Export-Import Bank of the United States,1,66200,0,Economic & Financial Regulation
+California,Morris K. Udall and Stewart L. Udall Foundation,1,54257.86,0,"Education, Arts & Culture"
+California,Executive Office of the President,1,53328,0,Government Operations & Administration
+California,Consumer Financial Protection Bureau,1,42298.8,0,Economic & Financial Regulation

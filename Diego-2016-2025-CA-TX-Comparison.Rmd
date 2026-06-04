@@ -16,12 +16,103 @@ library(janitor)
 library(scales)
 library(tidycensus)
 library(inflateR)
+library(jsonlite)
 
 options(scipen = 999)  # Disable scientific notation globally
 census_api_key(Sys.getenv("MY_CENSUS_API_KEY"))
 
+agency_categories_json <- read_json("data/agencies_categories.txt")
 spending_2020_2024 <- read_csv("data/federal spending by county 2020-2024.csv") |> clean_names()
 ```
+
+```{r}
+#| label: getting-proper-agency-list
+
+agencies_categories <- list()
+
+for (category in names(agency_categories_json)) {
+  for (agency in agency_categories_json[[category]]) {
+    agencies_categories[[as.character(agency)]] <- category
+  }
+}
+```
+
+
+Here are the categories for the agencies that have spent money in either Texas or California. I gave Claude the list of agencies and asked it to categorize them by function.
+
+- **Defense and National Security**
+  - Department of Defense
+  - Department of Homeland Security
+  - Nuclear Regulatory Commission
+  - Defense Nuclear Facilities Safety Board
+  - Selective Service System
+- **Social Services & Public Health**
+  - Department of Health and Human Services
+  - Social Security Administration
+  - Department of Housing and Urban Development
+  - Department of Veteran Affairs
+  - Corporation for National and Community Service
+  - Peace Corps
+- **Economic & Financial Regulation**
+  - Department of the Treasury
+  - Securities and Exchange Commission
+  - Federal Trade Commission
+  - Consumer Financial Protection Bureau
+  - Commodity Futures Trading Commission
+  - Consumer Product Safety Commission
+  - Export-Import Bank of the United States
+  - Pension Benefit Guaranty Corporation
+  - National Credit Union Administration
+  - Small Business Administration
+  - Overseas Private Investment Corporation 
+  - U.S. International Development Finance Corporation
+- **Justice, Law & Civil Rights**
+  - Department of Justice
+  - Equal Employment Opportunity Commission
+  - Federal Election Commission
+  - Election Assistance Commission
+  - Merit Systems Protection Board
+  - Federal Mediation and Conciliation Service
+  - National Labor Relations Board
+  - Federal Maritime Commission
+  - International Trade Commission
+- **Science, Technology & Environment**
+  - National Aeronautics and Space Administration
+  - Department of Energy
+  - Environmental Protection Agency
+  - National Science Foundation
+  - United States Chemical Safety Board
+  - Gulf Coast Ecosystem Restoration Council
+- **Agriculture, Commerce & Labor**
+  - Department of Agriculture
+  - Department of Commerce
+  - Department of Labor
+  - Department of the Interior
+  - United States Trade and Development Agency
+- **Education, Arts & Culture**
+  - Department of Education
+  - National Endowment for the Arts
+  - National Endowment for the Humanities
+  - Institute of Museum and Library Services
+  - Smithsonian Institution
+  - National Gallery of Art
+  - Morris K. Udall and Stewart L. Udall Foundation
+- **Infrastructure & Transportation**
+  - Department of Transportation
+  - National Transportation Safety Board
+  - Federal Communications Commission
+  - Railroad Retirement Board
+- **Foreign Affairs & International Development**
+  - Department of State
+  - Agency for International Development
+  - Millennium Challenge Corporation
+  - U.S. Agency for Global Media
+- **Government Operations & Administration**
+  - General Services Administration
+  - Office of Personnel Management
+  - Government Accountability Office
+  - National Archives and Records Administration
+  - Executive Office of the President
 
 # Overall spending comparisons
 
@@ -46,6 +137,20 @@ spending_2020_2024_adjusted <- spending_2020_2024 |>
   select(-c(contracts, grants, direct_payments))
 
 spending_2020_2024_adjusted
+```
+
+```{r}
+agencies_categories$`Department of Defense`
+```
+
+
+```{r}
+#|label: adding-agency-category
+
+spending_2020_2024_adjusted <- spending_2020_2024_adjusted |>
+  mutate(
+    category = unlist(agencies_categories)[agency]
+  )
 ```
 
 
@@ -156,30 +261,248 @@ all_agency_spending_2024_ca_tx <- agency_spending_2024_ca_tx |>
 all_agency_spending_2024_ca_tx
 ```
 
-
-```{r}
-all_agencies <- union(agencies_2020, agencies_2024)
-all_agencies
-```
-
-
-
 ```{r}
 #| label: reading-contracts-data
 
 # 2020
-tx_contracts_2020 <- read_csv("data/Texas2020Contracts.csv", col_types = cols(.default = "c")) |> clean_names()
-ca_contracts_2020 <- read_csv("data/California2020Contracts.csv", col_types = cols(.default = "c")) |> clean_names()
+tx_contracts_2020 <- read_csv("data/Texas2020Contracts.csv", col_types = cols(.default = "c")) |> 
+  clean_names() |> 
+  select("contract_award_unique_key","award_id_piid","parent_award_agency_name","current_total_value_of_award","award_base_action_date":"award_latest_action_date_fiscal_year","awarding_agency_name","awarding_sub_agency_name","awarding_office_name","funding_agency_name","funding_sub_agency_name","funding_office_name","foreign_funding","foreign_funding_description","recipient_name","recipient_parent_name","recipient_city_name","recipient_county_name","primary_place_of_performance_city_name","primary_place_of_performance_county_name","award_type","prime_award_base_transaction_description","product_or_service_code_description","domestic_or_foreign_entity","country_of_product_or_service_origin","small_business_competitiveness_demonstration_program","multi_year_contract_code","alaskan_native_corporation_owned_firm":"contracting_officers_determination_of_business_size","emerging_small_business","community_developed_corporation_owned_firm","receives_contracts":"receives_contracts_and_financial_assistance","foreign_owned","small_disadvantaged_business") |> 
+  mutate(current_total_value_of_award = as.double(current_total_value_of_award), award_base_action_date = ymd(award_base_action_date), award_latest_action_date = ymd(award_latest_action_date))
+
+ca_contracts_2020 <- read_csv("data/California2020Contracts.csv", col_types = cols(.default = "c")) |>
+  clean_names() |> 
+  select("contract_award_unique_key","award_id_piid","parent_award_agency_name","current_total_value_of_award","award_base_action_date":"award_latest_action_date_fiscal_year","awarding_agency_name","awarding_sub_agency_name","awarding_office_name","funding_agency_name","funding_sub_agency_name","funding_office_name","foreign_funding","foreign_funding_description","recipient_name","recipient_parent_name","recipient_city_name","recipient_county_name","primary_place_of_performance_city_name","primary_place_of_performance_county_name","award_type","prime_award_base_transaction_description","product_or_service_code_description","domestic_or_foreign_entity","country_of_product_or_service_origin","small_business_competitiveness_demonstration_program","multi_year_contract_code","alaskan_native_corporation_owned_firm":"contracting_officers_determination_of_business_size","emerging_small_business","community_developed_corporation_owned_firm","receives_contracts":"receives_contracts_and_financial_assistance","foreign_owned","small_disadvantaged_business") |>
+  mutate(current_total_value_of_award = as.double(current_total_value_of_award), award_base_action_date = ymd(award_base_action_date), award_latest_action_date = ymd(award_latest_action_date))
 
 # 2024
-tx_contracts_2024 <- read_csv("data/Texas2024Contracts.csv", col_types = cols(.default = "c")) |> clean_names()
-ca_contracts_2024 <- read_csv("data/California2024Contracts.csv", col_types = cols(.default = "c")) |> clean_names()
+tx_contracts_2024 <- read_csv("data/Texas2024Contracts.csv", col_types = cols(.default = "c")) |> 
+  clean_names() |> 
+  select("contract_award_unique_key","award_id_piid","parent_award_agency_name","current_total_value_of_award","award_base_action_date":"award_latest_action_date_fiscal_year","awarding_agency_name","awarding_sub_agency_name","awarding_office_name","funding_agency_name","funding_sub_agency_name","funding_office_name","foreign_funding","foreign_funding_description","recipient_name","recipient_parent_name","recipient_city_name","recipient_county_name","primary_place_of_performance_city_name","primary_place_of_performance_county_name","award_type","prime_award_base_transaction_description","product_or_service_code_description","domestic_or_foreign_entity","country_of_product_or_service_origin","small_business_competitiveness_demonstration_program","multi_year_contract_code","alaskan_native_corporation_owned_firm":"contracting_officers_determination_of_business_size","emerging_small_business","community_developed_corporation_owned_firm","receives_contracts":"receives_contracts_and_financial_assistance","foreign_owned","small_disadvantaged_business") |>
+  mutate(current_total_value_of_award = as.double(current_total_value_of_award), award_base_action_date = ymd(award_base_action_date), award_latest_action_date = ymd(award_latest_action_date))
 
+ca_contracts_2024 <- read_csv("data/California2024Contracts.csv", col_types = cols(.default = "c")) |>
+  clean_names() |> 
+  select("contract_award_unique_key","award_id_piid","parent_award_agency_name","current_total_value_of_award","award_base_action_date":"award_latest_action_date_fiscal_year","awarding_agency_name","awarding_sub_agency_name","awarding_office_name","funding_agency_name","funding_sub_agency_name","funding_office_name","foreign_funding","foreign_funding_description","recipient_name","recipient_parent_name","recipient_city_name","recipient_county_name","primary_place_of_performance_city_name","primary_place_of_performance_county_name","award_type","prime_award_base_transaction_description","product_or_service_code_description","domestic_or_foreign_entity","country_of_product_or_service_origin","small_business_competitiveness_demonstration_program","multi_year_contract_code","alaskan_native_corporation_owned_firm":"contracting_officers_determination_of_business_size","emerging_small_business","community_developed_corporation_owned_firm","receives_contracts":"receives_contracts_and_financial_assistance","foreign_owned","small_disadvantaged_business") |>
+  mutate(current_total_value_of_award = as.double(current_total_value_of_award), award_base_action_date = ymd(award_base_action_date), award_latest_action_date = ymd(award_latest_action_date))
+
+num_of_tx_2020_contract_awards <- n_distinct(tx_contracts_2020$contract_award_unique_key)
+num_of_tx_2024_contract_awards <- n_distinct(tx_contracts_2024$contract_award_unique_key)
+num_of_ca_2020_contract_awards <- n_distinct(ca_contracts_2020$contract_award_unique_key)
+num_of_ca_2024_contract_awards <- n_distinct(ca_contracts_2024$contract_award_unique_key)
 ```
 
 ```{r}
+#| label: more-mutating-contract-data
 
-all_contract_cols <- union(tx_contracts_2020 |> names() , tx_contracts_2024 |> names()) |> union( ca_contracts_2020 |> names()) |> union(ca_contracts_2024 |> names() )
-all_contract_cols
+tx_contracts_2020 <- tx_contracts_2020 |> mutate(minority_owned_business_all = if_else((minority_owned_business == "t" | other_minority_owned_business == "t"), T, F)) 
+
+ca_contracts_2020 <- ca_contracts_2020 |> mutate(minority_owned_business_all = if_else((minority_owned_business == "t" | other_minority_owned_business == "t"), T, F)) 
+
+tx_contracts_2024 <- tx_contracts_2024 |> mutate(minority_owned_business_all = if_else((minority_owned_business == "t" | other_minority_owned_business == "t"), T, F)) 
+
+ca_contracts_2024 <- ca_contracts_2024 |> mutate(minority_owned_business_all = if_else((minority_owned_business == "t" | other_minority_owned_business == "t"), T, F)) 
 ```
+
+
+```{r}
+#|label: looking-at-2020-minority-business-spending
+
+tx_minority_contracts_2020_agencies <- tx_contracts_2020 |> 
+  filter(minority_owned_business_all == T) |>
+  group_by(awarding_agency_name) |>
+  summarize(
+    n_contracts = n(),
+    total_agency_award_values = sum(current_total_value_of_award),
+    .groups = "drop"
+    ) |>
+  arrange(desc(total_agency_award_values)) |>
+  mutate(
+    total_agency_award_per_capita = round(total_agency_award_values / tx_2020_pop, 2),
+    category = unlist(agencies_categories)[awarding_agency_name]
+  ) 
+
+tx_minority_contracts_2020_overall <- tx_contracts_2020 |>
+  group_by(minority_owned_business_all) |>
+  summarize(
+    n_contracts = n(),
+    total_spending = sum(current_total_value_of_award),
+    .groups = "drop"
+  ) |>
+  mutate(
+    total_award_spending_per_capita = round(total_spending / tx_2020_pop, 2)
+  )
+
+ca_minority_contracts_2020_agencies <- ca_contracts_2020 |>
+  filter(minority_owned_business_all == T) |>
+  group_by(awarding_agency_name) |>
+  summarize(
+    n_contracts = n(),
+    total_agency_award_values = sum(current_total_value_of_award),
+    .groups = "drop"
+  ) |>
+  arrange(desc(total_agency_award_values)) |>
+  mutate(
+    total_agency_award_per_capita = round(total_agency_award_values/ ca_2020_pop, 2),
+    category = unlist(agencies_categories)[awarding_agency_name]
+  ) 
+
+ca_minority_contracts_2020_overall <- ca_contracts_2020 |>
+  group_by(minority_owned_business_all) |>
+  summarize(
+    n_contracts = n(),
+    total_spending = sum(current_total_value_of_award),
+    .groups = "drop"
+  ) |>
+  mutate(
+    total_award_spending_per_capita = round(total_spending / ca_2020_pop, 2)
+  )
+```
+
+```{r}
+#| label: looking-at-2024-minority-contract-spending
+
+tx_minority_contracts_2024_agencies <- tx_contracts_2024 |> 
+  filter(minority_owned_business_all == T) |>
+  group_by(awarding_agency_name) |>
+  summarize(
+    n_contracts = n(),
+    total_agency_award_values = sum(current_total_value_of_award),
+    .groups = "drop"
+    ) |>
+  arrange(desc(total_agency_award_values)) |>
+  mutate(
+    total_agency_award_per_capita = round(total_agency_award_values / tx_2024_pop, 2),
+    category = unlist(agencies_categories)[awarding_agency_name]
+  ) 
+
+tx_minority_contracts_2024_overall <- tx_contracts_2024 |>
+  group_by(minority_owned_business_all) |>
+  summarize(
+    n_contracts = n(),
+    total_spending = sum(current_total_value_of_award),
+    .groups = "drop"
+  ) |>
+  mutate(
+    total_award_spending_per_capita = round(total_spending / tx_2024_pop, 2)
+  )
+
+ca_minority_contracts_2024_agencies <- ca_contracts_2024 |>
+  filter(minority_owned_business_all == T) |>
+  group_by(awarding_agency_name) |>
+  summarize(
+    n_contracts = n(),
+    total_agency_award_values = sum(current_total_value_of_award),
+    .groups = "drop"
+  ) |>
+  arrange(desc(total_agency_award_values)) |>
+  mutate(
+    total_agency_award_per_capita = round(total_agency_award_values/ ca_2024_pop, 2),
+    category = unlist(agencies_categories)[awarding_agency_name]
+  )
+
+ca_minority_contracts_2024_overall <- ca_contracts_2024 |>
+  group_by(minority_owned_business_all) |>
+  summarize(
+    n_contracts = n(),
+    total_spending = sum(current_total_value_of_award),
+    .groups = "drop"
+  ) |>
+  mutate(
+    total_award_spending_per_capita = round(total_spending / ca_2024_pop, 2)
+  )
+```
+
+Comparing spending in 2020
+
+```{r}
+#| label: comparing-2020-spending
+
+tx_ca_minority_contracts_overall <- tx_minority_contracts_2020_overall |>
+  mutate(state = "Texas", year = 2020) |> 
+  rbind(ca_minority_contracts_2020_overall |> mutate(state = "California", year = 2020)) |>
+  rbind(rbind(
+    tx_minority_contracts_2024_overall |> mutate(state = "Texas", year = 2024), 
+    ca_minority_contracts_2024_overall |> mutate(state = "California", year = 2024)
+  )) |>
+  select(state, year, everything()) |> 
+  filter(minority_owned_business_all == T) 
+
+tx_ca_minority_contracts_overall |> write_csv("data-exports/tx-ca-minority-contracts-overall.csv")
+
+tx_ca_minority_contracts_agencies_2020 <- tx_minority_contracts_2020_agencies |> 
+  mutate(state = "Texas") |>
+  rbind(ca_minority_contracts_2020_agencies |> mutate(state = "California")) |>
+  select(state, everything()) |>
+  arrange(desc(total_agency_award_per_capita))
+
+tx_ca_minority_contracts_agencies_2020 |> write_csv("data-exports/tx-ca-minority-contracts-agencies-2020-unaggregated.csv")
+
+tx_ca_minority_contracts_agencies_agg_2020 <- tx_ca_minority_contracts_agencies_2020 |>
+  group_by(state, category) |>
+  summarize(
+    n_contracts = sum(n_contracts),
+    total_category_awards = sum(total_agency_award_values),
+    .groups = "drop"
+  ) |>
+  mutate(
+    total_category_awards_per_capita = case_when(
+      state == "Texas" ~ total_category_awards / tx_2020_pop,
+      state == "California" ~ total_category_awards / ca_2020_pop
+    )
+  ) |>
+  arrange(desc(total_category_awards_per_capita))
+
+tx_ca_minority_contracts_agencies_agg_2020 |> write_csv("data-exports/tx-ca-minority-contracts-agencies-2020-agg.csv")
+  
+```
+
+```{r}
+#| label: comparing-2024-spending
+
+tx_ca_minority_contracts_agencies_2024 <- tx_minority_contracts_2024_agencies |>
+  mutate(state = "Texas") |>
+  rbind(ca_minority_contracts_2024_agencies |> mutate(state = "California")) |>
+  select(state, everything()) |>
+  arrange(desc(total_agency_award_per_capita))
+
+tx_ca_minority_contracts_agencies_2024 |> write_csv("data-exports/tx-ca-minority-contracts-agencies-2024-unaggregated.csv")
+
+tx_ca_minority_contracts_agencies_agg_2024 <- tx_ca_minority_contracts_agencies_2024 |>
+  group_by(state, category) |>
+  summarize(
+    n_contracts = sum(n_contracts),
+    total_category_awards = sum(total_agency_award_values),
+    .groups = "drop"
+  ) |>
+  mutate(
+    total_category_awards_per_capita = case_when(
+      state == "Texas" ~ total_category_awards / tx_2024_pop,
+      state == "California" ~ total_category_awards / ca_2024_pop
+    )
+  ) |>
+  arrange(desc(total_category_awards_per_capita))
+
+tx_ca_minority_contracts_agencies_agg_2024 |> write_csv("data-exports/tx-ca-minority-contracts-agencies-2024-agg.csv")
+```
+
+
+```{r}
+#| label: finding-a-minority-contractor-in-2024-tx
+
+tx_contracts_2024 |> 
+  filter(minority_owned_business_all == T) |>
+  group_by(recipient_name, awarding_agency_name) |>
+  summarize(
+    total_award_sum = sum(current_total_value_of_award),
+    .groups = "drop") |>
+  mutate(total_award_per_capita = round(total_award_sum / tx_2024_pop, 2)) |> 
+  arrange(desc(total_award_per_capita)) |> 
+  head(50) 
+```
+
+```{r}
+tx_contracts_2024 |> filter(recipient_name == "MVM, INC.")
+```
+
 
