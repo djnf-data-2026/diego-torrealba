@@ -1,21 +1,21 @@
 state,category,n_contracts,total_category_awards,total_category_awards_per_capita
-Texas,Defense & National Security,18661,10643244639.959951,371.68082266584014
-California,Defense & National Security,35808,10797656617.719986,274.42815803060927
-California,"Science, Technology & Environment",590,2054327385.8100002,52.21181784522416
-Texas,Social Services & Public Health,951,1051828309.19,36.73169456193482
-California,Social Services & Public Health,1809,1114264197.7500002,28.319614354670616
-California,Government Operations & Administration,22224,1099621092.6299765,27.94745208759667
-California,"Agriculture, Commerce & Labor",1773,794800792.3600001,20.200282817910214
-Texas,Government Operations & Administration,9256,553463883.3499948,19.327932264848393
-Texas,"Agriculture, Commerce & Labor",527,463931116.34999996,16.20129056677386
-Texas,"Science, Technology & Environment",127,396566791.75000006,13.848809868204587
-California,Infrastructure & Transportation,254,283742153.35999966,7.211457009517828
-Texas,Economic & Financial Regulation,158,156647095.67,5.47039209906381
-Texas,"Justice, Law & Civil Rights",727,152283602.55,5.318011244596819
-California,"Justice, Law & Civil Rights",558,172759653.1499998,4.390778024757415
-California,Economic & Financial Regulation,492,115983512.21999992,2.947782351980019
-California,Foreign Affairs & International Development,1560,64863406.260000005,1.6485378016477041
-Texas,Infrastructure & Transportation,73,41063870.44,1.4340225808283316
-Texas,Foreign Affairs & International Development,300,38279856.11000001,1.3367999037696014
-Texas,"Education, Arts & Culture",7,5756256.460000001,0.20101859995735358
-California,"Education, Arts & Culture",18,5976464.64,0.1518950121083394
+Texas,Defense & National Security,18661,12899612504.039993,450.47715708526493
+California,Defense & National Security,35808,13086759821.100136,332.6069275438622
+California,"Science, Technology & Environment",590,2489844791.72,63.28072323141782
+Texas,Social Services & Public Health,951,1274815910.680001,44.5188138070298
+California,Social Services & Public Health,1809,1350488207.609998,34.32337259625955
+California,Government Operations & Administration,22224,1332740766.1100047,33.87231197699459
+California,"Agriculture, Commerce & Labor",1773,963298560.3599999,24.482742775807353
+Texas,Government Operations & Administration,9256,670798231.8300215,23.425454086932604
+Texas,"Agriculture, Commerce & Labor",527,562284513.0600001,19.635964168459495
+Texas,"Science, Technology & Environment",127,480638951.57000005,16.784757559181383
+California,Infrastructure & Transportation,254,343895489.8900002,8.74028589598497
+Texas,Economic & Financial Regulation,158,189856279.91,6.630115222597228
+Texas,"Justice, Law & Civil Rights",727,184567726.1800001,6.445429624589001
+California,"Justice, Law & Civil Rights",558,209384699.6999999,5.321622968095147
+California,Economic & Financial Regulation,492,140572016.85999998,3.5727122118542955
+California,Foreign Affairs & International Development,1560,78614448.43999997,1.9980278169409897
+Texas,Infrastructure & Transportation,73,49769410.94999999,1.738035367150959
+Texas,Foreign Affairs & International Development,300,46395185.679999985,1.6202014859767133
+Texas,"Education, Arts & Culture",7,6976582.82,0.24363454281585736
+California,"Education, Arts & Culture",18,7243475.150000001,0.18409675483593352

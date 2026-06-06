@@ -295,13 +295,21 @@ num_of_ca_2024_contract_awards <- n_distinct(ca_contracts_2024$contract_award_un
 ```{r}
 #| label: more-mutating-contract-data
 
-tx_contracts_2020 <- tx_contracts_2020 |> mutate(minority_owned_business_all = if_else((minority_owned_business == "t" | other_minority_owned_business == "t"), T, F)) 
+tx_contracts_2020 <- tx_contracts_2020 |> mutate(
+  minority_owned_business_all = if_else((minority_owned_business == "t" | other_minority_owned_business == "t"), T, F),
+  current_total_value_of_award = adjust_inflation(current_total_value_of_award, from_year = 2020, currency = "USD")
+  ) 
 
-ca_contracts_2020 <- ca_contracts_2020 |> mutate(minority_owned_business_all = if_else((minority_owned_business == "t" | other_minority_owned_business == "t"), T, F)) 
+ca_contracts_2020 <- ca_contracts_2020 |> mutate(
+  minority_owned_business_all = if_else((minority_owned_business == "t" | other_minority_owned_business == "t"),T, F),
+  current_total_value_of_award = adjust_inflation(current_total_value_of_award, from_year = 2020, currency = "USD")
+  ) 
 
 tx_contracts_2024 <- tx_contracts_2024 |> mutate(minority_owned_business_all = if_else((minority_owned_business == "t" | other_minority_owned_business == "t"), T, F)) 
 
 ca_contracts_2024 <- ca_contracts_2024 |> mutate(minority_owned_business_all = if_else((minority_owned_business == "t" | other_minority_owned_business == "t"), T, F)) 
+
+
 ```
 
 
@@ -505,4 +513,55 @@ tx_contracts_2024 |>
 tx_contracts_2024 |> filter(recipient_name == "MVM, INC.")
 ```
 
+```{r}
+#| minority-spending-vs-overall
+
+tx_contracts_2020_summary <- tx_contracts_2020 |>
+  summarize(
+    total_award_sum = sum(current_total_value_of_award),
+    minority_award_sum = sum(current_total_value_of_award[minority_owned_business_all == T])
+  ) |>
+  mutate(state = "Texas", 
+         year = "2020", 
+         minority_award_percent = round((minority_award_sum / total_award_sum) * 100 , 2)) |>
+  select(year, state, everything())
+
+ca_contracts_2020_summary <- ca_contracts_2020 |>
+  summarize(
+    total_award_sum = sum(current_total_value_of_award),
+    minority_award_sum = sum(current_total_value_of_award[minority_owned_business_all == T])
+  ) |>
+  mutate(
+    state = "California",
+    year = "2020",
+    minority_award_percent = round((minority_award_sum / total_award_sum) * 100 , 2)
+  ) |>
+  select(year, state, everything())
+
+tx_contracts_2024_summary <- tx_contracts_2024 |>
+  summarize(
+    total_award_sum = sum(current_total_value_of_award),
+    minority_award_sum = sum(current_total_value_of_award[minority_owned_business_all == T])
+  ) |>
+  mutate(state = "Texas", 
+         year = "2024", 
+         minority_award_percent = round((minority_award_sum / total_award_sum) * 100 , 2)) |>
+  select(year, state, everything())
+
+ca_contracts_2024_summary <- ca_contracts_2024 |>
+  summarize(
+    total_award_sum = sum(current_total_value_of_award),
+    minority_award_sum = sum(current_total_value_of_award[minority_owned_business_all == T])
+  ) |>
+  mutate(
+    state = "California",
+    year = "2024",
+    minority_award_percent = round((minority_award_sum / total_award_sum) * 100 , 2)
+  ) |>
+  select(year, state, everything())
+
+contracts_2020_2024_summary <- rbind(tx_contracts_2020_summary, ca_contracts_2020_summary, tx_contracts_2024_summary, ca_contracts_2024_summary)
+
+contracts_2020_2024_summary |> write_csv("data-exports/minority-award-sum-percents-2020-2024.csv")
+```
 
